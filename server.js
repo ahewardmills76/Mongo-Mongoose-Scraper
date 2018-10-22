@@ -4,8 +4,19 @@ var cheerio = require('cheerio');
 var request = require('request');
 var exphbs = require('express-handlebars');
 var mongoose = require('mongoose');
+var mongojs = require('mongojs');
 
 var app = express();
+
+// Database configuration
+var databaseUrl = "scraper";
+var collections = ["scrapedData"];
+
+// Hook mongojs configuration to the db variable
+var db = mongojs(databaseUrl, collections);
+db.on("error", function(error) {
+  console.log("Database Error:", error);
+});
 
 app.use(express.static('public'))
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/scraper";
@@ -32,8 +43,8 @@ app.get('/scrape', function(req, res){
 });
 
 function scrape(cb) {
-    // Making a request for reddit's "webdev" board. The page's HTML is passed as the callback's third argument
-request("https://old.reddit.com/r/webdev/", function(error, response, html) {
+    // Making a request for reddit's "nba" board. The page's HTML is passed as the callback's third argument
+request("https://www.reddit.com/r/nba/", function(error, response, html) {
 
     // Load the HTML into cheerio and save it to a variable
     // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
