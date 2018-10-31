@@ -40,28 +40,17 @@ mongoose.connect(MONGODB_URI);
 var databaseUrl = "scraper";
 var collections = ["scrapedData"];
 
-var db = mongoose.connection;
-
-db.on('error', function(err) {
-  console.log('Mongoose Error: ', err);
-});
-
-db.once('open', function() {
-  console.log('Mongoose connection successful.');
-});
-
-
 // Hook mongojs configuration to the db variable
-// var db = mongojs(databaseUrl, collections);
-// db.on("error", function(error) {
-//   console.log("Database Error:", error);
-// });
+var db = mongojs(databaseUrl, collections);
+db.on("error", function(error) {
+  console.log("Database Error:", error);
+});
 
 
 // Set Handlebars.
 var exphbs = require("express-handlebars");
 
-app.engine("handlebars", exphbs({ defaultLayout: "main"}));
+app.engine("handlebars", exphbs({defaultLayout: "main"}));
 app.set("view engine", "handlebars");
 
 
@@ -75,10 +64,11 @@ app.get('/', function(req, res) {
 });
 
 
+
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
     // Grab every document in the Articles collection
-    db.Article.find()
+    db.Article.find({})
       .then(function(dbArticle) {
         // If we were able to successfully find Articles, send them back to the client
         res.json(dbArticle);
@@ -90,7 +80,7 @@ app.get("/articles", function(req, res) {
   });
 
 
-app.get('/articles', function(req, res){
+app.get('/scrape', function(req, res){
     scrape(function(data){
         console.log(data, "---- this is the data");
         res.render('index', data);
@@ -107,7 +97,7 @@ request("https://www.nytimes.com/", function(error, response, html) {
   
     // An empty object to save the data that we'll scrape
     var results = [];
-      
+  
     // With cheerio, find each p-tag with the "title" class
     // (i: iterator. element: the current element)
     $("article").each(function(i, element) {
@@ -117,9 +107,9 @@ request("https://www.nytimes.com/", function(error, response, html) {
   
       // In the currently selected element, look at its child elements (i.e., its a-tags),
       // then save the values for any "href" attributes that the child elements may have
-      var link = $(element).children("a").attr("href");
+      var link = $(element).children("").attr("href");
   
-      var summary = $(element).children(".summary").text();
+      var summary =$(element).children(".summary").text();
       
       // Save these results in an object that we'll push into the results array we defined earlier
       results.push({
