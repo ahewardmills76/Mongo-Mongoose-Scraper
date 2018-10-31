@@ -40,11 +40,22 @@ mongoose.connect(MONGODB_URI);
 var databaseUrl = "scraper";
 var collections = ["scrapedData"];
 
-// Hook mongojs configuration to the db variable
-var db = mongojs(databaseUrl, collections);
-db.on("error", function(error) {
-  console.log("Database Error:", error);
+var db = mongoose.connection;
+
+db.on('error', function(err) {
+  console.log('Mongoose Error: ', err);
 });
+
+db.once('open', function() {
+  console.log('Mongoose connection successful.');
+});
+
+
+// Hook mongojs configuration to the db variable
+// var db = mongojs(databaseUrl, collections);
+// db.on("error", function(error) {
+//   console.log("Database Error:", error);
+// });
 
 
 // Set Handlebars.
