@@ -1,0 +1,27 @@
+<div class = "container" >
+<div class="jumbotron">
+     <h1>New York Times Scraper</h1>
+       <h3>Check out recent articles from the New York Times!</h3>
+       <a href="/scrape"> <button id="scrape" type="button" class="btn btn-danger scrape" > Scrape for Articles </button></a>
+</div>
+<div class="article-container">
+
+    {{#each Article}}
+  <div class="row">
+
+<div class="panel panel-primary">
+  <div class="panel-heading">{{this.title}}
+    <a href="/notes/{{this._id}}">
+    <button type="button" class="btn btn-warning save-article" >See Notes</button> </a>
+  </div>
+  <div class="panel-body">
+    <a href= "https://www.nytimes.com{{this.link}}" target="_blank"> {{this.link}}</a>
+  </div>
+</div>
+    </div>
+ {{/each}}
+</div>
+
+
+
+
