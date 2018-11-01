@@ -126,8 +126,8 @@ request("https://www.nytimes.com/", function(error, response, html) {
   
 }
 
+var PORT = process.env.PORT || 3000
 
-
-app.listen(3000, function(){
+app.listen(PORT, function(){
     console.log('listening on port 3000');
 })
