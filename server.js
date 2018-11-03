@@ -83,7 +83,9 @@ app.get("/articles", function(req, res) {
 app.get('/scrape', function(req, res){
     scrape(function(data){
         console.log(data, "---- this is the data");
-        res.render('index', data);
+        res.render('index', {
+          articles: data
+        });
     });
 });
 
